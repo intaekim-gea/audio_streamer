@@ -43,24 +43,23 @@ class AudioStreamerPlugin : FlutterPlugin, EventChannel.StreamHandler, MethodCal
     eventSink = null
   }
 
-  private fun startRecording(recordingMode: Int) {
-    val sampleRate = 16000
+  private fun startRecording(recordingMode: Int, sampleRate: Int) {
     val channelConfig = AudioFormat.CHANNEL_IN_MONO
     val audioFormat = AudioFormat.ENCODING_PCM_16BIT
     val minBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat)
     val audioRecord = AudioRecord(recordingMode, sampleRate, channelConfig, audioFormat, minBufSize)
     var acousticEchoCanceler: AcousticEchoCanceler? = null
     // Initialize AcousticEchoCanceler for the AudioRecord instance
-    if (AcousticEchoCanceler.isAvailable()) {
-      acousticEchoCanceler = AcousticEchoCanceler.create(audioRecord.audioSessionId)
-      acousticEchoCanceler.enabled = true
-    }
+    //if (AcousticEchoCanceler.isAvailable()) {
+    //  acousticEchoCanceler = AcousticEchoCanceler.create(audioRecord.audioSessionId)
+    //  acousticEchoCanceler.enabled = true
+    //}
 
     val audioData = ByteArray(minBufSize)
     audioRecord.startRecording()
 
     while (eventSink != null) {
-      val readSize = audioRecord.read(audioData, 0, audioData.size)
+      val readSize = audioRecord.read(audioData, 0, audioData.size, AudioRecord.READ_BLOCKING)
       if (readSize > 0) {
         mainHandler.post {
           eventSink?.success(audioData)
@@ -82,7 +81,8 @@ class AudioStreamerPlugin : FlutterPlugin, EventChannel.StreamHandler, MethodCal
                       // Recording mode.
                       // If you want to echo cancellation, you should use VOICE_COMMUNICATION.
                       // see https://developer.android.com/reference/android/media/MediaRecorder.AudioSource
-                      call.argument<Int>("recordingMode") ?: MediaRecorder.AudioSource.VOICE_COMMUNICATION
+                      call.argument<Int>("recordingMode") ?: MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+                       call.argument<Int>("sampleRate") ?: 16000
                     )
                 }
                 result.success(null)
