@@ -109,7 +109,6 @@ class AudioStreamerPlugin : FlutterPlugin, EventChannel.StreamHandler, MethodCal
         if (amplificationFactor > 1.0) {
           audioData = transformBuffer(sampleRate, amplificationFactor, audioData)
         }
-        audioData = transformBuffer(sampleRate, 2.0, audioData);
         mainHandler.post {
           eventSink?.success(audioData)
         }
