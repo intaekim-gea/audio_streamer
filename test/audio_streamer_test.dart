@@ -11,7 +11,12 @@ class MockAudioStreamerPlatform
   Stream<List<int>> get audioStream => throw UnimplementedError();
 
   @override
-  Future<void> startRecording(int recordingMode) => throw UnimplementedError();
+  Future<void> startRecording(
+    int recordingMode,
+    int sampleRate,
+    double amplificationFactor,
+  ) =>
+      throw UnimplementedError();
 
   @override
   Future<void> stopRecording() => throw UnimplementedError();

@@ -27,7 +27,11 @@ abstract class AudioStreamerPlatform extends PlatformInterface {
     throw UnimplementedError('audioStream has not been implemented.');
   }
 
-  Future<void> startRecording(int recordingMode, int sampleRate) {
+  Future<void> startRecording(
+    int recordingMode,
+    int sampleRate,
+    double amplificationFactor,
+  ) {
     throw UnimplementedError('startRecording() has not been implemented.');
   }
 

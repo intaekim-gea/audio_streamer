@@ -8,12 +8,16 @@ class AudioStreamer {
   AudioStreamer._();
 
   static final AudioStreamer instance = AudioStreamer._();
-  Future<void> startRecording(
-      [int recordingMode = 7, int sampleRate = 16000]) async {
+  Future<void> startRecording([
+    int recordingMode = 7,
+    int sampleRate = 16000,
+    double amplificationFactor = 1.0,
+  ]) async {
     try {
       await AudioStreamerPlatform.instance.startRecording(
         recordingMode,
         sampleRate,
+        amplificationFactor,
       );
     } on PlatformException {
       throw 'Failed to start audio stream.';
